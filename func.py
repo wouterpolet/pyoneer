@@ -46,6 +46,6 @@ def get_batch_transform_displacement_map(displacement, interpolation_order = 3):
     return lambda x: tf.map_fn(fn, elems = (x, displacement))[0]
 
 def get_batch_transform_rotation(displacement, interpolation_order, rot_range):
-    print(f'Rotation range {rot_range}')
     fn = lambda x: tf.transpose(tfa.image.rotate(tf.transpose(x, [2, 1, 0]), np.random.uniform(-rot_range*np.pi,rot_range*np.pi)), [2, 1, 0])
     return lambda x: tf.map_fn(fn, elems=x)
+
