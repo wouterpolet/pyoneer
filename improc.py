@@ -10,6 +10,9 @@ from scipy.ndimage import zoom
 
 #%% Functions used in the SSL method for transforming
 
+def get_identity():
+    return np.identity()
+
 def get_random_gaussian_noise(shape, sigma):
     
     return np.random.normal(scale = sigma, size = shape)

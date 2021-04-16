@@ -2,21 +2,29 @@
 
 debug: True
 
-results_path: '/home/gerda/Desktop/results'
-exp_name: 'ssl test'
+results_path: '../results/rotation'
+exp_name: 'test'
 
-data_split: cifar10_default
+data_split: cifar10_ssl_default
 
 num_classes: 10
 
 # transform parameters
+#transform:
+#    gen_func: random_shift_displacement_map
+#    params_gen:
+#        max_shift: 10
+#    apply_func: displacement_map
+#    params_apply:
+#        interpolation_order: 3
 transform:
     gen_func: random_shift_displacement_map
     params_gen:
         max_shift: 10
-    apply_func: displacement_map
+    apply_func: rotation
     params_apply:
         interpolation_order: 3
+        rot_range: 1
 
 # should network outputs and labels also be transformed and how:
 transform_output: False
@@ -41,11 +49,11 @@ arch:
 optimizer:
     name: Adam
     params:
-        learning_rate: 0.001
+        learning_rate: 0.0005
 
 # loss function
 loss: kl_divergence
-alpha: 0
+alpha: 1
 
 # training
 batch_size: 128

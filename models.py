@@ -171,16 +171,16 @@ class SemiSupervisedConsistencyModel(tf.keras.Model):
                 (*transform_parameters, **self.p.transform.params_apply)
                 
         t_x = transform(x)                  # transform input images
-        x = tf.concat((x, t_x), axis = 0)   # form a batch to feed to the network
+        x = tf.concat((x, t_x), axis=0)   # form a batch to feed to the network
 
         # if network outputs and labels also need to be transformed (as in the segmentation case):
         if self.p.transform_output:        
             transform_output = getattr(func, 'get_batch_transform_' +  self.p.transform_output.apply_func) \
                 (*transform_parameters, **self.p.transform_output.params_apply)
             t_y = transform_output(y)           # transform GT labels
-            y = tf.concat((y, t_y), axis = 0)   # form a batch corresponding to x
+            y = tf.concat((y, t_y), axis=0)   # form a batch corresponding to x
         else:
-            y = tf.concat((y, y), axis = 0)
+            y = tf.concat((y, y), axis=0)
         
         # save original and transformed inputs when in the debugging mode:
         if self.p.debug and self.run_eagerly:            
@@ -196,8 +196,8 @@ class SemiSupervisedConsistencyModel(tf.keras.Model):
         pred1, pred2 = pred[:n, ...], pred[n:, ...]
         
         # separate labeled images from the rest
-        yl = tf.concat((y[:n_labeled, ...], y[n:(n+n_labeled), ...]), axis = 0)
-        predl = tf.concat((pred1[:n_labeled, ...], pred2[:n_labeled, ...]), axis = 0)
+        yl = tf.concat((y[:n_labeled, ...], y[n:(n+n_labeled), ...]), axis=0)
+        predl = tf.concat((pred1[:n_labeled, ...], pred2[:n_labeled, ...]), axis=0)
 
         # supervised loss
         loss_sup = tf.cond(tf.math.equal(tf.size(yl), 0),

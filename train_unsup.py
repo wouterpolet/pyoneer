@@ -12,7 +12,7 @@ import func, models
 from datagen import SimpleSequence
 
 # comment this line out to use gpu:
-# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 # sets the dimension order to 'channel_first', which the rest of the code assumes
 tf.keras.backend.set_image_data_format("channels_first")
@@ -23,7 +23,7 @@ params_file = 'params.yml'
 
 p = OmegaConf.load(params_file)
 
-run_eagerly = False # set to true to debug model training
+run_eagerly = True # set to true to debug model training
 
 # %% Data split parameters
 
@@ -102,6 +102,8 @@ model = models.SemiSupervisedConsistencyModel(p, inputs = [model_arch.input],
 model.compile(optimizer = opt, loss = getattr(func, p.loss),
               metrics = metrics, run_eagerly = run_eagerly)
 
+model.load_weights('../results/supervised.h5')
+
 # %% Train the model
 
 start = time.time()
@@ -125,6 +127,7 @@ history = model.fit(x = train_gen,
                     callbacks = [csv_logger,
                                  model_checkpoint,
                                  early_stop])
+
 
 print('Training time: %.1f seconds.' % (time.time() - start))
 
